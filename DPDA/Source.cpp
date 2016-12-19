@@ -50,6 +50,10 @@ void check_str()
 	bool check = false;
 	bool check_alph = false;
 	int s = str.size();
+	bool check_trans = false;
+
+	bool k=false;
+
 	for (int i = 0; i < s; i++)
 	{
 		check_alph = false;
@@ -70,25 +74,32 @@ void check_str()
 				curr_node = dpda[init_state];
 				check_str();
 			}
-			else return;
+			else k = true; break;
 		}
 	}
+	if (k == true) return;
+
+
 
 	bool check_top = true;
 	stck.push('$');
 
 	for (int i = 0; i < s; i++)
 	{
+		check_trans = false;
 		for (int j = 0; j < curr_node.trans_num; j++)
 		{
 			if (curr_node.trans_symbol[j] == str[i])
 			{
+				check_trans = true;
 				char top = stck.top();
 				if (top != curr_node.stackpop[j])
 				{
-					check_top = false;
-					break;
+					
+							check_top = false;
+							break;
 				}
+
 				stck.pop();
 
 				for (int k = curr_node.stackpush[j].size(); k > 0; k--)
@@ -102,31 +113,36 @@ void check_str()
 				}
 
 				y = curr_node.trans_state[j];
-			}
-
-			else if (curr_node.trans_symbol[j] == 'l')
-			{
-				int ltrans = 0;
-				char top = stck.top();
-
-				if (top == '$')
-					ltrans++;
-
-				if (curr_node.stackpush[j].size() == 1)
-				{
-					char s_push = curr_node.stackpush[j][0];
-					if (s_push == '$')
-						ltrans++;
-				}
-
-				if (ltrans == 2)
-					y = curr_node.trans_state[j];
-			}
+			}			
 		}
-		if (!check_top) break;
+
+		if (check_top == false || check_trans == false) { y = 11110;
+		break; }
 		else curr_node = dpda[y];
 	}
 
+	for (int i = 0; i < curr_node.trans_num; i++)
+	{
+		if (curr_node.trans_symbol[i] == 'l')
+		{
+			int ltrans = 0;
+			char top = stck.top();
+
+			if (top == '$')
+				ltrans++;
+
+			if (curr_node.stackpush[i].size() == 1)
+			{
+				char s_push = curr_node.stackpush[i][0];
+				if (s_push == '$')
+					ltrans++;
+			}
+
+			if (ltrans == 2)
+				y = curr_node.trans_state[i];
+		}
+
+	}
 
 	int d = 25;
 
@@ -147,14 +163,14 @@ void check_str()
 
 	for (int i = 0; i < num_acc; i++)
 	{
-		if (acc_state[i] == y && check == false && check_top == true){
+		if (acc_state[i] == y && check == false && check_top == true && check_trans==true){
 			system("color f2");
 			check = true;
 			cout << "\n\n\t\tACCEPT!";
 		}
 	}
 
-	if (check == false || check_top == false)
+	if (check == false || check_top == false || check_trans==false)
 	{
 		system("color f4");
 		cout << "\n\n\t\tREJECT!";
@@ -258,7 +274,7 @@ void Write_DPDA()
 	cin >> init_state;
 	output << init_state << endl;
 	curr_node = dpda[init_state];
-	output.close();	
+	output.close();
 	system("cls");
 	cout << "\n\n\n\t\tDPDA SAVED!\n\n";
 	system("pause>0");
