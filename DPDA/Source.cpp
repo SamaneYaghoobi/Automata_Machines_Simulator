@@ -71,6 +71,9 @@ void check_str()
 			cin >> f;
 			if (f == 1)
 			{
+				int s = stck.size();
+				for (int i = 0; i < s; i++)
+					stck.pop();
 				curr_node = dpda[init_state];
 				check_str();
 			}
@@ -83,9 +86,50 @@ void check_str()
 
 	bool check_top = true;
 	stck.push('$');
-
+	int d = 25;
 	for (int i = 0; i < s; i++)
 	{
+
+		///*system("cls");
+		//cout << "\n\t\t" << str << " : " << endl << endl << endl;
+		//gotoxy(25, 5);
+		//cout << str;*/
+		//gotoxy(d, 6);
+		//cout << "^";
+		//Sleep(1000);
+		//d++;
+
+
+		int size = stck.size();
+		char *arr = new char[stck.size()];
+
+		for (int h = stck.size()-1; h>=0; h--)
+		{	
+			arr[h] = stck.top();
+			stck.pop();
+		}
+
+		system("cls");
+			int r;
+			cout << "\n\t\t" << str << " : " << endl << endl << endl;
+			gotoxy(25, 5);
+			cout << str;
+			gotoxy(d, 6);
+			cout << "^";
+			d++;
+			Sleep(1000);
+			int b = 24;
+			for ( r=0 ; r < size; r++)
+			{
+				gotoxy(b, 9);
+				stck.push(arr[r]);
+				cout << arr[r];
+				b++;
+				Sleep(1000);
+			}	
+			system("cls");
+		
+
 		check_trans = false;
 		for (int j = 0; j < curr_node.trans_num; j++)
 		{
@@ -93,6 +137,7 @@ void check_str()
 			{
 				check_trans = true;
 				char top = stck.top();
+
 				if (top != curr_node.stackpop[j])
 				{
 					
@@ -121,6 +166,7 @@ void check_str()
 		else curr_node = dpda[y];
 	}
 
+
 	for (int i = 0; i < curr_node.trans_num; i++)
 	{
 		if (curr_node.trans_symbol[i] == 'l')
@@ -144,19 +190,19 @@ void check_str()
 
 	}
 
-	int d = 25;
+	//int d = 25;
 
-	for (int i = 0; i < s; i++)
-	{
-		system("cls");
-		cout << "\n\t\t" << str << " : " << endl << endl << endl;
-		gotoxy(25, 5);
-		cout << str;
-		gotoxy(d, 6);
-		cout << "^";
-		Sleep(1000);
-		d++;
-	}
+	//for (int i = 0; i < s; i++)
+	//{
+	//	system("cls");
+	//	cout << "\n\t\t" << str << " : " << endl << endl << endl;
+	//	gotoxy(25, 5);
+	//	cout << str;
+	//	gotoxy(d, 6);
+	//	cout << "^";
+	//	Sleep(1000);
+	//	d++;
+	//}
 
 	gotoxy(16 + s, 1);
 
@@ -187,6 +233,9 @@ void check_str()
 	cin >> f;
 	if (f == 1)
 	{
+		int s = stck.size();
+		for (int i = 0; i < s; i++)
+			stck.pop();
 		curr_node = dpda[init_state];
 		check_str();
 	}
